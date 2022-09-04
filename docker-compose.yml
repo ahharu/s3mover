@@ -1,0 +1,33 @@
+version: '3'
+services:
+  s3mover:
+    build: s3mover/.
+    image: s3mover/s3mover
+    links:
+      - db
+    depends_on:
+      - db
+      - migration
+    env_file:
+      - env_file.env
+    volumes:
+      - ${HOME}/.aws/credentials-root:/root/.aws/credentials
+    command: ["./wait-for.sh", "db:3306", "-t", "120", "--",  "python3", "-u" , "s3mover.py" ]
+  db:
+    build: db/.
+    image: s3mover/db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d
+    env_file:
+      - env_file.env
+  migration:
+    image: s3mover/s3mover
+    entrypoint: ["./wait-for.sh", "db:3306", "-t", "120", "--",  "dockerize", "-template", "./alembic.ini.tmpl:./alembic.ini", "alembic"]
+    command: ["upgrade", "head"]
+    env_file:
+      - env_file.env
+    depends_on:
+      - db
