@@ -1,0 +1,7 @@
+.pyc
+__pycache__
+miniodata
+db/data
+db/init
+**/data
+**/init

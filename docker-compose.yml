@@ -1,13 +1,15 @@
 version: '3'
 services:
   s3mover:
-    build: s3mover/.
-    image: s3mover/s3mover
+    build: .
+    image: s3mover
     links:
       - db
+      - minio
     depends_on:
       - db
       - migration
+      - minio
     env_file:
       - env_file.env
     volumes:
@@ -15,7 +17,7 @@ services:
     command: ["./wait-for.sh", "db:3306", "-t", "120", "--",  "python3", "-u" , "s3mover.py" ]
   db:
     build: db/.
-    image: s3mover/db
+    image: db
     ports:
       - "3306:3306"
     volumes:
@@ -24,10 +26,36 @@ services:
     env_file:
       - env_file.env
   migration:
-    image: s3mover/s3mover
+    build: .
+    image: s3mover
     entrypoint: ["./wait-for.sh", "db:3306", "-t", "120", "--",  "dockerize", "-template", "./alembic.ini.tmpl:./alembic.ini", "alembic"]
     command: ["upgrade", "head"]
     env_file:
       - env_file.env
     depends_on:
       - db
+  minio:
+    image: docker.io/minio/minio
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./miniodata:/data
+    env_file:
+      - env_file.env
+    command: server /data
+
+  createbuckets:
+    image: docker.io/minio/mc
+    env_file:
+      - env_file.env
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 $$MINIO_ACCESS_KEY $$MINIO_SECRET_KEY;
+      /usr/bin/mc mb myminio/$$SOURCE_BUCKET;
+      /usr/bin/mc policy set public myminio/$$SOURCE_BUCKET;
+      /usr/bin/mc mb myminio/$$DEST_BUCKET;
+      /usr/bin/mc policy set public myminio/$$DEST_BUCKET;
+      exit 0;
+      "

@@ -5,7 +5,7 @@ Base = declarative_base()
 
 
 class Avatar(Base):
-    __tablename__ = 'avatar'
+    __tablename__ = 'avatars'
     id = Column(Integer, primary_key=True, autoincrement=True)
     path = Column(String(128), nullable=False)
 
