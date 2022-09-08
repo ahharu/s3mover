@@ -141,11 +141,6 @@ parser.add_argument('--chunksize', metavar='T', type=int,
 
 args = parser.parse_args()
 
-print(args.awsaccesskey)
-print(args.awssecretkey)
-print(args.s3endpoint)
-print(args.region)
-
 client = boto3.client('s3', region_name=args.region, endpoint_url=args.s3endpoint, aws_access_key_id=args.awsaccesskey,
                       aws_secret_access_key=args.awssecretkey, config=Config(signature_version='s3v4'))
 
