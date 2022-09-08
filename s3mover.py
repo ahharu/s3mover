@@ -178,14 +178,6 @@ except ClientError:
   print("The buckets don't exist")
   exit(999)
 
-boilerplate_env = os.getenv("BOILERPLATE_ENV", "dev")
-config = ConfigFactory().create_config(boilerplate_env)
-engine = create_engine(config.SQLALCHEMY_DATABASE_URI, pool_size=60, max_overflow=20)
-
-Session = sessionmaker(bind=engine)
-
-cursession = Session()
-
 copy_s3_bucket(src_bucket=args.srcbucket, dst_bucket=args.dstbucket, threads=args.threads,
                aws_access_key_id=args.awsaccesskey, aws_secret_access_key=args.awssecretkey, sessionmaker=Session,
                oldprefix=args.oldprefix, newprefix=args.newprefix, chunksize=args.chunksize)
