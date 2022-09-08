@@ -80,9 +80,6 @@ class CopyObject(Thread):
 
 def copy_s3_bucket(src_bucket, dst_bucket, aws_access_key_id, aws_secret_access_key, prefix=None, threads=10,
                   sessionmaker=None, oldprefix=None, newprefix=None, chunksize=5, region='us-east-1', s3endpoint=None):
-  """
-  Example usage: copy_s3_bucket(SOURCE_BUCKET='my-source-bucket', DEST_BUCKET='my-destination-bucket', prefix='parent/child/dir/', threads=20)
-  """
 
 
   key_copy_thread_list = []
