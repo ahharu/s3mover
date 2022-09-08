@@ -12,8 +12,6 @@ services:
       - minio
     env_file:
       - env_file.env
-    volumes:
-      - ${HOME}/.aws/credentials-root:/root/.aws/credentials
     command: ["./wait-for.sh", "db:3306", "-t", "120", "--",  "python3", "-u" , "s3mover.py" ]
   db:
     build: db/.
