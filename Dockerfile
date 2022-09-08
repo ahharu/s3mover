@@ -41,4 +41,4 @@ RUN apk update \
 
 RUN pip install -r requirements.txt
 RUN apk del .build-deps
-CMD chown root:root /root/.aws/credentials && chmod 600 /root/.aws/credentials && python ./s3mover.py
+CMD python ./s3mover.py
