@@ -115,13 +115,6 @@ def copy_s3_bucket(src_bucket, dst_bucket, aws_access_key_id, aws_secret_access_
 
 start = time.time()
 
-ec2_config = Config(
-  retries=dict(
-    max_attempts=100
-  ),
-  signature_version='s3v4'
-)
-
 parser = argparse.ArgumentParser(description='Get Spot Pricing')
 parser.add_argument('--region', metavar='R', type=str,
                     help='regions', default=(os.getenv('AWS_REGION', None)))
