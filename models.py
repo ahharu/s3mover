@@ -11,4 +11,4 @@ class Avatar(Base):
 
     def __repr__(self):
         return 'id: {}, path: {}'.format(
-            self.id, self.path, self.instance_type)
+            self.id, self.path)

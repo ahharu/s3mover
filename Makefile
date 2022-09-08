@@ -10,6 +10,9 @@ clean:
 		docker images -q --filter "reference=s3mover/s3mover" --filter "reference=s3mover/db" --filter "reference=s3mover/migrations" | xargs docker rmi || echo "No Images to remove"
 		docker-compose down
 
+stop:
+		docker-compose down
+
 python-packages:
 		workon=$CWD/.env3
 		virtualenv -p /usr/bin/python3
