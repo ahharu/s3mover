@@ -17,6 +17,10 @@ Move from s3 to another..
 
 ### Get it Started
 
+####Note
+You will need `pymysql` and `cryptography` in order to run SRESeeder.sh
+SRESeeder.sh expects `python3` to be available since I have both 2 and 3 installed. If you only have 3 and only available as `python` , adapt accordingly
+
 You can start by doing
 
 - make runminio
